@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>4912 km — Pour Filsan Mohamed Ahmed</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Inter:wght@200;400;600&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght=400;600&family=Inter:wght=200;400;600&family=Poppins:wght=300;400;600&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; user-select: none; -webkit-user-select: none; }
         body, html { width: 100%; height: 100%; overflow: hidden; background-color: #020208; font-family: 'Inter', sans-serif; color: #ffffff; }
@@ -30,18 +30,30 @@
         .route-line { font-size: 0.75rem; letter-spacing: 2px; color: #94a3b8; text-transform: uppercase; text-align: center; line-height: 1.6; max-width: 90%; }
         .target-name { font-family: 'Cinzel', serif; color: #ebdca5; font-size: clamp(0.9rem, 3vw, 1.2rem); letter-spacing: 3px; margin-top: 20px; text-transform: uppercase; text-align: center; }
 
-        /* Capteur d'Empreinte Digitale */
-        .hold-container { position: relative; width: 140px; height: 140px; display: flex; justify-content: center; align-items: center; margin-bottom: 2vh; }
-        .hold-button {
-            width: 90px; height: 90px; background: rgba(56, 189, 248, 0.03); border: 2px dashed rgba(56, 189, 248, 0.4);
-            border-radius: 50%; display: flex; justify-content: center; align-items: center;
-            cursor: pointer; z-index: 12; transition: all 0.3s;
-            box-shadow: 0 0 25px rgba(56, 189, 248, 0.05);
-        }
-        .hold-icon { font-size: 2.2rem; filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.6)); transition: transform 0.4s; position: relative; animation: fingerPulse 2s infinite; }
+        /* Scanner d'Empreinte Digitale Réel */
+        .hold-container { position: relative; width: 150px; height: 150px; display: flex; justify-content: center; align-items: center; margin-bottom: 2vh; }
         
-        .progress-svg { position: absolute; width: 140px; height: 140px; transform: rotate(-90deg); pointer-events: none; z-index: 11; }
-        .progress-circle { stroke: #38bdf8; stroke-dasharray: 377; stroke-dashoffset: 377; stroke-width: 4; transition: stroke-dashoffset 0.1s linear; fill: transparent; stroke-linecap: round; }
+        .hold-button {
+            width: 100px; height: 120px; background: rgba(56, 189, 248, 0.02); 
+            border: 2px solid rgba(56, 189, 248, 0.2); border-radius: 20px; 
+            display: flex; justify-content: center; align-items: center;
+            cursor: pointer; z-index: 12; transition: all 0.4s; position: relative; overflow: hidden;
+            box-shadow: inset 0 0 15px rgba(56, 189, 248, 0.05);
+        }
+        
+        /* Tracé SVG de l'empreinte du pouce */
+        .fingerprint-svg { width: 65px; height: auto; fill: none; stroke: rgba(56, 189, 248, 0.3); stroke-width: 2.5; stroke-linecap: round; transition: all 0.4s; }
+        
+        /* Ligne Laser du Scanner */
+        .laser-line { position: absolute; top: 0; left: 0; width: 100%; height: 2px; background: #38bdf8; box-shadow: 0 0 12px #38bdf8; opacity: 0; pointer-events: none; }
+
+        /* Quand Filsan appuie : Effet d'activation biométrique */
+        .hold-button.scanning { border-color: #38bdf8; background: rgba(56, 189, 248, 0.08); box-shadow: 0 0 25px rgba(56, 189, 248, 0.3); }
+        .hold-button.scanning .fingerprint-svg { stroke: #38bdf8; filter: drop-shadow(0 0 8px #38bdf8); }
+        .hold-button.scanning .laser-line { opacity: 1; animation: laserScan 2s linear infinite; }
+
+        .progress-svg { position: absolute; width: 150px; height: 150px; transform: rotate(-90deg); pointer-events: none; z-index: 11; }
+        .progress-circle { stroke: #38bdf8; stroke-dasharray: 440; stroke-dashoffset: 440; stroke-width: 3; transition: stroke-dashoffset 0.1s linear; fill: transparent; stroke-linecap: round; }
         .hint-text { font-size: 0.75rem; letter-spacing: 2px; color: #64748b; text-transform: uppercase; text-align: center; max-width: 280px; line-height: 1.6; min-height: 40px; }
 
         /* Écran INTERMÉDIAIRE : La Quête des Énigmes */
@@ -64,7 +76,7 @@
         .btn-yes { background: #38bdf8; color: #000000; z-index: 15; box-shadow: 0 0 15px rgba(56, 189, 248, 0.4); }
         .btn-no { background: rgba(255,255,255,0.08); color: #ffffff; border: 1px solid rgba(255,255,255,0.15); position: relative; transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 14; }
 
-        /* Écran 3 : Couche UI responsive pour l'univers 3D */
+        /* Écran 3 : Univers 3D */
         #ui-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 2; pointer-events: none; display: none; }
         
         .star-trigger {
@@ -86,7 +98,7 @@
 
         .shake { animation: shake 0.4s ease-in-out; }
         
-        /* Modales pour les souvenirs adaptées au Mobile */
+        /* Modales souvenirs */
         .story-card {
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.8);
             width: 88%; max-width: 400px; background: rgba(10, 10, 18, 0.6);
@@ -100,16 +112,14 @@
         .story-card.active { opacity: 1; pointer-events: auto; transform: translate(-50%, -50%) scale(1); }
         .story-card h3 { font-family: 'Cinzel', serif; font-size: 1.4rem; margin-bottom: 15px; color: #ebdca5; }
         .story-card p { font-size: 0.95rem; line-height: 1.6; color: #cbd5e1; font-weight: 300; }
+        .close-btn { margin-top: 25px; background: #ffffff; color: #000000; border: none; padding: 12px 30px; border-radius: 25px; cursor: pointer; font-weight: 600; font-size: 0.8rem; letter-spacing: 1px; text-transform: uppercase; }
 
-        .close-btn { margin-top: 25px; background: #ffffff; color: #000000; border: none; padding: 12px 30px; border-radius: 25px; cursor: pointer; font-weight: 600; font-size: 0.8rem; letter-spacing: 1px; text-transform: uppercase; box-shadow: 0 5px 15px rgba(255,255,255,0.1); }
-
-        /* Écran 4 : Le Grand Final Émotionnel Responsive */
+        /* Écran 4 : Le Grand Final Émotionnel */
         #final-screen {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             z-index: 8; background: radial-gradient(circle at 50% 100%, #0c1524 0%, #020208 100%);
             display: flex; flex-direction: column; justify-content: center; align-items: center;
             opacity: 0; pointer-events: none; transition: opacity 2.5s ease; padding: 20px; text-align: center;
-            overflow-y: auto;
         }
         #final-screen.active { opacity: 1; pointer-events: auto; }
         
@@ -118,14 +128,13 @@
             background: rgba(255, 255, 255, 0.01); border: 1px solid rgba(255, 255, 255, 0.04);
             border-radius: 24px; backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
             box-shadow: 0 40px 100px rgba(0, 0, 0, 0.7);
-            margin: auto;
         }
         .letter-box h1 { font-family: 'Cinzel', serif; font-size: clamp(1.3rem, 4vw, 1.8rem); color: #ebdca5; margin-bottom: 25px; letter-spacing: 1px; line-height: 1.4; }
         .letter-box p { font-size: clamp(0.9rem, 3vw, 1rem); line-height: 1.9; font-weight: 300; text-align: justify; color: #e2e8f0; }
         .signature { margin-top: 30px; text-align: right; font-family: 'Cinzel', serif; font-size: 0.85rem; color: #cbd5e1; letter-spacing: 2px; }
 
         /* Animations */
-        @keyframes fingerPulse { 0%, 100% { transform: scale(1); filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.5)); } 50% { transform: scale(1.08); filter: drop-shadow(0 0 18px rgba(56, 189, 248, 0.9)); } }
+        @keyframes laserScan { 0% { top: 0%; } 50% { top: 100%; } 100% { top: 0%; } }
         @keyframes shake { 0%, 100% { transform: translateX(0); } 20%, 60% { transform: translateX(-6px); } 40%, 80% { transform: translateX(6px); } }
 
         .glow-orb { position: absolute; width: 300px; height: 300px; background: radial-gradient(circle, rgba(56,189,248,0.06) 0%, rgba(0,0,0,0) 70%); top: 50%; left: 50%; transform: translate(-50%, -50%); pointer-events: none; z-index: 2; }
@@ -138,6 +147,7 @@
     <div class="glow-orb"></div>
     <div id="toast-alert">Ouvre les souvenirs dans l'ordre... ✨</div>
 
+    <!-- ÉCRAN 1 : COMPTEUR DE DISTANCE ET FUSEAUX HORAIRES -->
     <div id="intro-stage">
         <div class="clocks-container">
             <div class="clock-box">
@@ -156,17 +166,25 @@
             <div class="target-name">Destinataire : Filsan Mohamed Ahmed ✨</div>
         </div>
 
+        <!-- SCANNER CAPTEUR AVEC EMPREINTE VECTORIELLE -->
         <div class="hold-container">
             <svg class="progress-svg">
-                <circle class="progress-circle" cx="70" cy="70" r="60"/>
+                <!-- Cercle ajusté pour r=70 (2 * pi * 70 = 439.8 -> 440) -->
+                <circle class="progress-circle" cx="75" cy="75" r="70"/>
             </svg>
             <div class="hold-button" id="main-action">
-                <span class="hold-icon" id="action-icon">🫵</span>
+                <div class="laser-line"></div>
+                <!-- Vrai tracé d'empreinte de pouce en cercles concentriques complexes -->
+                <svg class="fingerprint-svg" viewBox="0 0 24 32">
+                    <path d="M12 1 C15 1, 19 3, 20 7 M4 10 C3 7, 7 3, 11 2 M2 15 C2 10, 6 5, 12 5 C18 5, 22 9, 22 14 M6 20 C4 16, 5 11, 10 9 C14 7, 19 9, 21 13 M9 24 C7 20, 9 15, 13 14 C16 13, 18 15, 19 18 M12 28 C10 25, 11 20, 14 19 C16 18, 17 20, 16 22 M14 31 C12 28, 13 25, 14 24 M12 11 V17 M9 14 C9 12, 12 10, 14 12 V16"/>
+                    <path d="M7 27 C6 23, 7 18, 11 17 M17 26 C18 22, 17 18, 14 17"/>
+                </svg>
             </div>
         </div>
-        <div class="hint-text" id="hint">Pose ton empreinte digitale pour briser la distance</div>
+        <div class="hint-text" id="hint">Pose ton pouce sur le capteur pour lancer l'analyse biométrique</div>
     </div>
 
+    <!-- ÉCRAN 2 : LA QUÊTE DES ÉNIGMES DE L'AMOUR -->
     <div id="riddle-stage">
         <div class="riddle-box">
             <h2 id="riddle-title">Énigme 01</h2>
@@ -180,6 +198,7 @@
 
     <div id="canvas-container"></div>
 
+    <!-- ÉCRAN 3 : LES SOUVENIRS INTERACTIFS -->
     <div id="ui-layer">
         <div id="trigger-1" class="star-trigger available" style="top: 28%; left: 20%;" onclick="openMemory(1)">
             <span class="num">01</span><span class="icon">✨</span>
@@ -192,6 +211,7 @@
         </div>
     </div>
 
+    <!-- Boîtes de Souvenirs -->
     <div id="card-1" class="story-card">
         <h3>01. Notre Premier Instant 💫</h3>
         <p>Le jour où tout a commencé. Même à distance aujourd'hui, ce moment reste ancré en moi comme si c'était hier. Mon cœur a choisi son camp ce jour-là.</p>
@@ -210,6 +230,7 @@
         <button class="close-btn" onclick="closeMemory(3)">Fusionner l'univers</button>
     </div>
 
+    <!-- ÉCRAN 4 : LE FINAL ABSOLU -->
     <div id="final-screen">
         <div class="letter-box">
             <h1>02 Juin — Joyeux Anniversaire<br><span style="font-size: 1.1rem; color: #ffffff; letter-spacing: 3px;">FILSAN MOHAMED AHMED</span></h1>
@@ -260,7 +281,7 @@
         }
         setTimeout(animateDistance, 500);
 
-        // --- LOGIQUE BIOMÉTRIQUE POÉTIQUE : LE BOUTON "NON" S'ENFUIT ET "OUI" GRANDIT ---
+        // --- LOGIQUE BOUTON "NON" S'ENFUIT ET "OUI" GRANDIT ---
         function fleeNo() {
             const btnNo = document.getElementById('btn-no');
             const btnYes = document.getElementById('btn-yes');
@@ -303,7 +324,7 @@
             }
         }
 
-        // --- MOTEUR 3D THREE.JS (GALAXIE RESPONSIVE) ---
+        // --- MOTEUR 3D THREE.JS ---
         let scene, camera, renderer, starGeo, stars;
         let currentStep = 1; 
         let starSpeedY = 0.0008;
@@ -317,7 +338,7 @@
 
             renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
             renderer.setSize(window.innerWidth, window.innerHeight);
-            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // Limite le ratio pour les écrans Retina lents
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
             document.getElementById('canvas-container').appendChild(renderer.domElement);
 
             starGeo = new THREE.BufferGeometry();
@@ -346,10 +367,9 @@
             requestAnimationFrame(animate);
         }
 
-        // --- LOGIQUE DU COMPTEUR EMBREINTE DIGITALE (ÉCRAN 1) ---
+        // --- LOGIQUE COMPTEUR ET ANIMATION BIOMÉTRIQUE REAL-TIME ---
         const actionBtn = document.getElementById('main-action');
         const progressCircle = document.querySelector('.progress-circle');
-        const actionIcon = document.getElementById('action-icon');
         const hintText = document.getElementById('hint');
         
         let progressInterval = null;
@@ -361,9 +381,10 @@
             e.preventDefault();
             if(holdActive) return;
             holdActive = true;
-            actionIcon.innerText = "🌀"; // Animation visuelle d'empreinte active
-            actionIcon.style.transform = "scale(1.2)";
-            hintText.innerText = "Analyse d'empreinte en cours... Reste appuyée";
+            
+            // Activation visuelle de la numérisation
+            actionBtn.classList.add('scanning');
+            hintText.innerText = "Analyse de l'empreinte de Filsan... Reste appuyée";
             hintText.style.color = "#38bdf8";
 
             let startTime = Date.now() - (currentProgress * (duration / 100));
@@ -372,8 +393,8 @@
                 let elapsed = Date.now() - startTime;
                 currentProgress = Math.min((elapsed / duration) * 100, 100);
                 
-                // Circonférence calculée : 2 * Math.PI * 60 = 376.99
-                let offset = 377 - (377 * currentProgress) / 100;
+                // Circonférence calculée pour r=70 -> 440
+                let offset = 440 - (440 * currentProgress) / 100;
                 progressCircle.style.strokeDashoffset = offset;
 
                 let dynamicDist = Math.max(Math.floor(TARGET_DIST * (1 - (currentProgress / 100))), 0);
@@ -391,9 +412,10 @@
             if(!holdActive) return;
             holdActive = false;
             clearInterval(progressInterval);
-            actionIcon.innerText = "🫵"; 
-            actionIcon.style.transform = "scale(1)";
-            hintText.innerText = "Empreinte relâchée... Recommence !";
+            
+            // Désactivation visuelle
+            actionBtn.classList.remove('scanning');
+            hintText.innerText = "Authentification interrompue... Recommence !";
             hintText.style.color = "#ef4444";
 
             let decayTime = Date.now();
@@ -402,7 +424,7 @@
             let decayInterval = setInterval(() => {
                 let elapsed = Date.now() - decayTime;
                 currentProgress = Math.max(startProgress - (elapsed / 1000) * 60, 0); 
-                let offset = 377 - (377 * currentProgress) / 100;
+                let offset = 440 - (440 * currentProgress) / 100;
                 progressCircle.style.strokeDashoffset = offset;
 
                 let dynamicDist = Math.floor(TARGET_DIST * (1 - (currentProgress / 100)));
@@ -410,7 +432,7 @@
 
                 if (currentProgress <= 0) {
                     clearInterval(decayInterval);
-                    hintText.innerText = "Pose ton empreinte digitale pour briser la distance";
+                    hintText.innerText = "Pose ton pouce sur le capteur pour lancer l'analyse biométrique";
                     hintText.style.color = "#64748b";
                 }
             }, 30);
@@ -427,7 +449,7 @@
             }, 1500);
         }
 
-        // --- GESTIONNAIRE RECHERCHES D'ÉTOILES SÉCURISÉES ---
+        // --- GESTIONNAIRE SOUVENIRS ---
         function showToast(text) {
             const toast = document.getElementById('toast-alert');
             toast.innerText = text;
