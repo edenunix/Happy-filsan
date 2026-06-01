@@ -30,30 +30,35 @@
         .route-line { font-size: 0.75rem; letter-spacing: 2px; color: #94a3b8; text-transform: uppercase; text-align: center; line-height: 1.6; max-width: 90%; }
         .target-name { font-family: 'Cinzel', serif; color: #ebdca5; font-size: clamp(0.9rem, 3vw, 1.2rem); letter-spacing: 3px; margin-top: 20px; text-transform: uppercase; text-align: center; }
 
-        /* Scanner d'Empreinte Digitale Réel */
-        .hold-container { position: relative; width: 150px; height: 150px; display: flex; justify-content: center; align-items: center; margin-bottom: 2vh; }
+        /* Le Scanner de l'image (Bouton d'action) */
+        .hold-container { position: relative; width: 160px; height: 160px; display: flex; justify-content: center; align-items: center; margin-bottom: 2vh; }
         
         .hold-button {
-            width: 100px; height: 120px; background: rgba(56, 189, 248, 0.02); 
-            border: 2px solid rgba(56, 189, 248, 0.2); border-radius: 20px; 
+            width: 110px; height: 145px; background: rgba(5, 5, 15, 0.8); 
+            border: 2px solid rgba(56, 189, 248, 0.15); border-radius: 24px; 
             display: flex; justify-content: center; align-items: center;
             cursor: pointer; z-index: 12; transition: all 0.4s; position: relative; overflow: hidden;
-            box-shadow: inset 0 0 15px rgba(56, 189, 248, 0.05);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
         }
         
-        /* Tracé SVG de l'empreinte du pouce */
-        .fingerprint-svg { width: 65px; height: auto; fill: none; stroke: rgba(56, 189, 248, 0.3); stroke-width: 2.5; stroke-linecap: round; transition: all 0.4s; }
+        /* Conteneur d'empreinte empilé pour l'effet de surbrillance */
+        .print-wrapper { position: relative; width: 75px; height: 105px; }
         
-        /* Ligne Laser du Scanner */
-        .laser-line { position: absolute; top: 0; left: 0; width: 100%; height: 2px; background: #38bdf8; box-shadow: 0 0 12px #38bdf8; opacity: 0; pointer-events: none; }
+        .fingerprint-svg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; fill: none; stroke-linecap: round; stroke-width: 2; transition: all 0.4s; }
+        .print-bg { stroke: rgba(56, 189, 248, 0.15); }
+        .print-active { stroke: #00e5ff; filter: drop-shadow(0 0 6px rgba(0, 229, 255, 0.8)); opacity: 0; transition: opacity 0.3s; }
+        
+        /* Ligne de scan laser néon */
+        .laser-line { position: absolute; left: 5%; width: 90%; height: 3px; background: #00e5ff; box-shadow: 0 0 15px #00e5ff, 0 0 5px #fff; opacity: 0; pointer-events: none; z-index: 15; top: 0; }
 
-        /* Quand Filsan appuie : Effet d'activation biométrique */
-        .hold-button.scanning { border-color: #38bdf8; background: rgba(56, 189, 248, 0.08); box-shadow: 0 0 25px rgba(56, 189, 248, 0.3); }
-        .hold-button.scanning .fingerprint-svg { stroke: #38bdf8; filter: drop-shadow(0 0 8px #38bdf8); }
-        .hold-button.scanning .laser-line { opacity: 1; animation: laserScan 2s linear infinite; }
+        /* Mode Numérisation Active (Quand elle maintient le pouce) */
+        .hold-button.scanning { border-color: rgba(56, 189, 248, 0.6); box-shadow: 0 0 30px rgba(56, 189, 248, 0.2), inset 0 0 15px rgba(56, 189, 248, 0.1); }
+        .hold-button.scanning .print-active { opacity: 1; }
+        .hold-button.scanning .laser-line { opacity: 1; animation: laserScan 2.5s ease-in-out infinite; }
 
-        .progress-svg { position: absolute; width: 150px; height: 150px; transform: rotate(-90deg); pointer-events: none; z-index: 11; }
-        .progress-circle { stroke: #38bdf8; stroke-dasharray: 440; stroke-dashoffset: 440; stroke-width: 3; transition: stroke-dashoffset 0.1s linear; fill: transparent; stroke-linecap: round; }
+        /* Le cercle de chargement extérieur */
+        .progress-svg { position: absolute; width: 160px; height: 160px; transform: rotate(-90deg); pointer-events: none; z-index: 11; }
+        .progress-circle { stroke: #38bdf8; stroke-dasharray: 471; stroke-dashoffset: 471; stroke-width: 3; transition: stroke-dashoffset 0.1s linear; fill: transparent; stroke-linecap: round; }
         .hint-text { font-size: 0.75rem; letter-spacing: 2px; color: #64748b; text-transform: uppercase; text-align: center; max-width: 280px; line-height: 1.6; min-height: 40px; }
 
         /* Écran INTERMÉDIAIRE : La Quête des Énigmes */
@@ -134,7 +139,11 @@
         .signature { margin-top: 30px; text-align: right; font-family: 'Cinzel', serif; font-size: 0.85rem; color: #cbd5e1; letter-spacing: 2px; }
 
         /* Animations */
-        @keyframes laserScan { 0% { top: 0%; } 50% { top: 100%; } 100% { top: 0%; } }
+        @keyframes laserScan {
+            0% { top: 0%; }
+            50% { top: 100%; }
+            100% { top: 0%; }
+        }
         @keyframes shake { 0%, 100% { transform: translateX(0); } 20%, 60% { transform: translateX(-6px); } 40%, 80% { transform: translateX(6px); } }
 
         .glow-orb { position: absolute; width: 300px; height: 300px; background: radial-gradient(circle, rgba(56,189,248,0.06) 0%, rgba(0,0,0,0) 70%); top: 50%; left: 50%; transform: translate(-50%, -50%); pointer-events: none; z-index: 2; }
@@ -147,7 +156,6 @@
     <div class="glow-orb"></div>
     <div id="toast-alert">Ouvre les souvenirs dans l'ordre... ✨</div>
 
-    <!-- ÉCRAN 1 : COMPTEUR DE DISTANCE ET FUSEAUX HORAIRES -->
     <div id="intro-stage">
         <div class="clocks-container">
             <div class="clock-box">
@@ -166,25 +174,27 @@
             <div class="target-name">Destinataire : Filsan Mohamed Ahmed ✨</div>
         </div>
 
-        <!-- SCANNER CAPTEUR AVEC EMPREINTE VECTORIELLE -->
         <div class="hold-container">
             <svg class="progress-svg">
-                <!-- Cercle ajusté pour r=70 (2 * pi * 70 = 439.8 -> 440) -->
-                <circle class="progress-circle" cx="75" cy="75" r="70"/>
+                <circle class="progress-circle" cx="80" cy="80" r="75"/>
             </svg>
             <div class="hold-button" id="main-action">
                 <div class="laser-line"></div>
-                <!-- Vrai tracé d'empreinte de pouce en cercles concentriques complexes -->
-                <svg class="fingerprint-svg" viewBox="0 0 24 32">
-                    <path d="M12 1 C15 1, 19 3, 20 7 M4 10 C3 7, 7 3, 11 2 M2 15 C2 10, 6 5, 12 5 C18 5, 22 9, 22 14 M6 20 C4 16, 5 11, 10 9 C14 7, 19 9, 21 13 M9 24 C7 20, 9 15, 13 14 C16 13, 18 15, 19 18 M12 28 C10 25, 11 20, 14 19 C16 18, 17 20, 16 22 M14 31 C12 28, 13 25, 14 24 M12 11 V17 M9 14 C9 12, 12 10, 14 12 V16"/>
-                    <path d="M7 27 C6 23, 7 18, 11 17 M17 26 C18 22, 17 18, 14 17"/>
-                </svg>
+                <div class="print-wrapper">
+                    <svg class="fingerprint-svg print-bg" viewBox="0 0 24 32">
+                        <path d="M12 1 C15 1, 19 3, 21 7 M3 11 C2 7, 7 2, 12 2 M1 16 C1 9, 6 4, 12 4 C18 4, 23 9, 23 15 M5 21 C3 16, 4 11, 9 9 C13 7, 19 8, 22 13 M8 25 C5 20, 8 14, 13 13 C17 12, 20 15, 21 19 M11 29 C9 25, 10 20, 14 19 C17 18, 19 21, 17 24 M13 31 C11 28, 12 25, 14 24 M12 8 V18 M8 13 C8 10, 12 8, 15 11 V16 M6 16 C6 12, 11 9, 16 12 M4 18 C4 13, 10 10, 17 14"/>
+                        <path d="M6 27 C5 22, 7 17, 12 16 M18 26 C19 21, 18 17, 14 16 M9 30 C9 27, 11 24, 13 24"/>
+                    </svg>
+                    <svg class="fingerprint-svg print-active" viewBox="0 0 24 32">
+                        <path d="M12 1 C15 1, 19 3, 21 7 M3 11 C2 7, 7 2, 12 2 M1 16 C1 9, 6 4, 12 4 C18 4, 23 9, 23 15 M5 21 C3 16, 4 11, 9 9 C13 7, 19 8, 22 13 M8 25 C5 20, 8 14, 13 13 C17 12, 20 15, 21 19 M11 29 C9 25, 10 20, 14 19 C17 18, 19 21, 17 24 M13 31 C11 28, 12 25, 14 24 M12 8 V18 M8 13 C8 10, 12 8, 15 11 V16 M6 16 C6 12, 11 9, 16 12 M4 18 C4 13, 10 10, 17 14"/>
+                        <path d="M6 27 C5 22, 7 17, 12 16 M18 26 C19 21, 18 17, 14 16 M9 30 C9 27, 11 24, 13 24"/>
+                    </svg>
+                </div>
             </div>
         </div>
-        <div class="hint-text" id="hint">Pose ton pouce sur le capteur pour lancer l'analyse biométrique</div>
+        <div class="hint-text" id="hint">Pose ton pouce sur le scanner pour lancer l'analyse biométrique</div>
     </div>
 
-    <!-- ÉCRAN 2 : LA QUÊTE DES ÉNIGMES DE L'AMOUR -->
     <div id="riddle-stage">
         <div class="riddle-box">
             <h2 id="riddle-title">Énigme 01</h2>
@@ -198,7 +208,6 @@
 
     <div id="canvas-container"></div>
 
-    <!-- ÉCRAN 3 : LES SOUVENIRS INTERACTIFS -->
     <div id="ui-layer">
         <div id="trigger-1" class="star-trigger available" style="top: 28%; left: 20%;" onclick="openMemory(1)">
             <span class="num">01</span><span class="icon">✨</span>
@@ -211,7 +220,6 @@
         </div>
     </div>
 
-    <!-- Boîtes de Souvenirs -->
     <div id="card-1" class="story-card">
         <h3>01. Notre Premier Instant 💫</h3>
         <p>Le jour où tout a commencé. Même à distance aujourd'hui, ce moment reste ancré en moi comme si c'était hier. Mon cœur a choisi son camp ce jour-là.</p>
@@ -230,7 +238,6 @@
         <button class="close-btn" onclick="closeMemory(3)">Fusionner l'univers</button>
     </div>
 
-    <!-- ÉCRAN 4 : LE FINAL ABSOLU -->
     <div id="final-screen">
         <div class="letter-box">
             <h1>02 Juin — Joyeux Anniversaire<br><span style="font-size: 1.1rem; color: #ffffff; letter-spacing: 3px;">FILSAN MOHAMED AHMED</span></h1>
@@ -367,7 +374,7 @@
             requestAnimationFrame(animate);
         }
 
-        // --- LOGIQUE COMPTEUR ET ANIMATION BIOMÉTRIQUE REAL-TIME ---
+        // --- LOGIQUE BIOMÉTRIQUE AVANCÉE (LASER + ECLAT) ---
         const actionBtn = document.getElementById('main-action');
         const progressCircle = document.querySelector('.progress-circle');
         const hintText = document.getElementById('hint');
@@ -382,7 +389,6 @@
             if(holdActive) return;
             holdActive = true;
             
-            // Activation visuelle de la numérisation
             actionBtn.classList.add('scanning');
             hintText.innerText = "Analyse de l'empreinte de Filsan... Reste appuyée";
             hintText.style.color = "#38bdf8";
@@ -393,8 +399,8 @@
                 let elapsed = Date.now() - startTime;
                 currentProgress = Math.min((elapsed / duration) * 100, 100);
                 
-                // Circonférence calculée pour r=70 -> 440
-                let offset = 440 - (440 * currentProgress) / 100;
+                // Circonférence calculée pour r=75 -> 471
+                let offset = 471 - (471 * currentProgress) / 100;
                 progressCircle.style.strokeDashoffset = offset;
 
                 let dynamicDist = Math.max(Math.floor(TARGET_DIST * (1 - (currentProgress / 100))), 0);
@@ -413,7 +419,6 @@
             holdActive = false;
             clearInterval(progressInterval);
             
-            // Désactivation visuelle
             actionBtn.classList.remove('scanning');
             hintText.innerText = "Authentification interrompue... Recommence !";
             hintText.style.color = "#ef4444";
@@ -424,7 +429,7 @@
             let decayInterval = setInterval(() => {
                 let elapsed = Date.now() - decayTime;
                 currentProgress = Math.max(startProgress - (elapsed / 1000) * 60, 0); 
-                let offset = 440 - (440 * currentProgress) / 100;
+                let offset = 471 - (471 * currentProgress) / 100;
                 progressCircle.style.strokeDashoffset = offset;
 
                 let dynamicDist = Math.floor(TARGET_DIST * (1 - (currentProgress / 100)));
