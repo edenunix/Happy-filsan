@@ -2,9 +2,9 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>4912 km — Pour Filsan Mohamed Ahmed</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght=400;600&family=Inter:wght=200;400;600&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Inter:wght@200;400;600&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; user-select: none; -webkit-user-select: none; }
         body, html { width: 100%; height: 100%; overflow: hidden; background-color: #020208; font-family: 'Inter', sans-serif; color: #ffffff; }
@@ -15,56 +15,56 @@
         #intro-stage {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 10;
             display: flex; flex-direction: column; justify-content: space-between;
-            align-items: center; padding: 60px 20px; background: #05050a;
+            align-items: center; padding: 8vh 20px; background: #05050a;
             transition: all 1.5s cubic-bezier(0.25, 1, 0.5, 1);
         }
         
-        .clocks-container { display: flex; width: 100%; max-width: 400px; justify-content: space-between; margin-top: 20px; }
+        .clocks-container { display: flex; width: 100%; max-width: 400px; justify-content: space-between; margin-top: 10px; }
         .clock-box { text-align: center; width: 45%; }
         .clock-label { font-size: 0.7rem; letter-spacing: 2px; color: #64748b; text-transform: uppercase; margin-bottom: 5px; }
-        .clock-time { font-family: 'Cinzel', serif; font-size: 1.8rem; color: #f8fafc; }
+        .clock-time { font-family: 'Cinzel', serif; font-size: clamp(1.4rem, 4vw, 2.2rem); color: #f8fafc; }
 
-        .geo-bridge { display: flex; flex-direction: column; align-items: center; justify-content: center; flex-grow: 1; width: 100%; }
-        .distance-display { font-family: 'Cinzel', serif; font-size: 3rem; font-weight: 400; letter-spacing: 2px; margin-bottom: 10px; text-shadow: 0 0 30px rgba(255,255,255,0.1); }
-        .distance-display span { font-size: 1.2rem; color: #38bdf8; font-family: 'Inter', sans-serif; margin-left: 5px; }
-        .route-line { font-size: 0.8rem; letter-spacing: 3px; color: #94a3b8; text-transform: uppercase; text-align: center; line-height: 1.6; }
-        .target-name { font-family: 'Cinzel', serif; color: #ebdca5; font-size: 1.1rem; letter-spacing: 3px; margin-top: 15px; text-transform: uppercase; }
+        .geo-bridge { display: flex; flex-direction: column; align-items: center; justify-content: center; flex-grow: 1; width: 100%; padding: 20px 0; }
+        .distance-display { font-family: 'Cinzel', serif; font-size: clamp(2.5rem, 8vw, 4rem); font-weight: 400; letter-spacing: 2px; margin-bottom: 10px; text-shadow: 0 0 30px rgba(255,255,255,0.1); }
+        .distance-display span { font-size: 1rem; color: #38bdf8; font-family: 'Inter', sans-serif; margin-left: 5px; }
+        .route-line { font-size: 0.75rem; letter-spacing: 2px; color: #94a3b8; text-transform: uppercase; text-align: center; line-height: 1.6; max-width: 90%; }
+        .target-name { font-family: 'Cinzel', serif; color: #ebdca5; font-size: clamp(0.9rem, 3vw, 1.2rem); letter-spacing: 3px; margin-top: 20px; text-transform: uppercase; text-align: center; }
 
-        /* Bouton Sacré à Pression Prolongée */
-        .hold-container { position: relative; width: 120px; height: 120px; display: flex; justify-content: center; align-items: center; margin-bottom: 40px; }
+        /* Capteur d'Empreinte Digitale */
+        .hold-container { position: relative; width: 140px; height: 140px; display: flex; justify-content: center; align-items: center; margin-bottom: 2vh; }
         .hold-button {
-            width: 80px; height: 80px; background: transparent; border: 2px solid rgba(56, 189, 248, 0.3);
+            width: 90px; height: 90px; background: rgba(56, 189, 248, 0.03); border: 2px dashed rgba(56, 189, 248, 0.4);
             border-radius: 50%; display: flex; justify-content: center; align-items: center;
             cursor: pointer; z-index: 12; transition: all 0.3s;
-            box-shadow: 0 0 20px rgba(56, 189, 248, 0.1);
+            box-shadow: 0 0 25px rgba(56, 189, 248, 0.05);
         }
-        .hold-button:active { transform: scale(0.95); background: rgba(56, 189, 248, 0.05); }
-        .hold-icon { font-size: 1.5rem; transition: transform 0.5s; }
+        .hold-icon { font-size: 2.2rem; filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.6)); transition: transform 0.4s; position: relative; animation: fingerPulse 2s infinite; }
         
-        .progress-svg { position: absolute; width: 120px; height: 120px; transform: rotate(-90deg); pointer-events: none; z-index: 11; }
-        .progress-circle { stroke: #38bdf8; stroke-dasharray: 314; stroke-dashoffset: 314; transition: stroke-dashoffset 0.1s linear; fill: transparent; }
-        .hint-text { font-size: 0.75rem; letter-spacing: 2px; color: #64748b; text-transform: uppercase; text-align: center; max-width: 250px; line-height: 1.6; }
+        .progress-svg { position: absolute; width: 140px; height: 140px; transform: rotate(-90deg); pointer-events: none; z-index: 11; }
+        .progress-circle { stroke: #38bdf8; stroke-dasharray: 377; stroke-dashoffset: 377; stroke-width: 4; transition: stroke-dashoffset 0.1s linear; fill: transparent; stroke-linecap: round; }
+        .hint-text { font-size: 0.75rem; letter-spacing: 2px; color: #64748b; text-transform: uppercase; text-align: center; max-width: 280px; line-height: 1.6; min-height: 40px; }
 
         /* Écran INTERMÉDIAIRE : La Quête des Énigmes */
         #riddle-stage {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 9;
             display: none; flex-direction: column; justify-content: center; align-items: center;
-            background: #030308; padding: 25px; text-align: center;
+            background: #030308; padding: 20px; text-align: center;
         }
         .riddle-box {
             width: 100%; max-width: 450px; background: rgba(255,255,255,0.02);
-            border: 1px solid rgba(255,255,255,0.05); border-radius: 24px; padding: 40px 30px;
+            border: 1px solid rgba(255,255,255,0.05); border-radius: 24px; padding: 40px 25px;
             backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
         }
-        .riddle-box h2 { font-family: 'Cinzel', serif; color: #ebdca5; font-size: 1.2rem; letter-spacing: 2px; margin-bottom: 10px; text-transform: uppercase; }
-        .riddle-box p { font-size: 1.1rem; line-height: 1.5; margin-bottom: 40px; min-height: 60px; font-weight: 300; }
-        .btn-container { display: flex; justify-content: center; align-items: center; gap: 30px; position: relative; min-height: 80px; width: 100%; }
+        .riddle-box h2 { font-family: 'Cinzel', serif; color: #ebdca5; font-size: 1.2rem; letter-spacing: 2px; margin-bottom: 15px; text-transform: uppercase; }
+        .riddle-box p { font-size: clamp(1rem, 3.5vw, 1.2rem); line-height: 1.6; margin-bottom: 35px; min-height: 70px; font-weight: 300; color: #f1f5f9; }
+        .btn-container { display: flex; justify-content: center; align-items: center; gap: 25px; position: relative; min-height: 100px; width: 100%; }
         
         .riddle-btn { padding: 12px 35px; border-radius: 30px; border: none; font-weight: 600; font-size: 1rem; cursor: pointer; transition: transform 0.1s ease, background-color 0.3s; }
-        .btn-yes { background: #38bdf8; color: #000000; z-index: 15; }
-        .btn-no { background: rgba(255,255,255,0.1); color: #ffffff; border: 1px solid rgba(255,255,255,0.2); position: relative; transition: all 0.2s ease; z-index: 14; }
+        .btn-yes { background: #38bdf8; color: #000000; z-index: 15; box-shadow: 0 0 15px rgba(56, 189, 248, 0.4); }
+        .btn-no { background: rgba(255,255,255,0.08); color: #ffffff; border: 1px solid rgba(255,255,255,0.15); position: relative; transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 14; }
 
-        /* Écran 3 : Couche UI pour l'univers 3D */
+        /* Écran 3 : Couche UI responsive pour l'univers 3D */
         #ui-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 2; pointer-events: none; display: none; }
         
         .star-trigger {
@@ -78,55 +78,58 @@
         
         .star-trigger.available { border-color: #38bdf8; background: rgba(56, 189, 248, 0.1); box-shadow: 0 0 20px rgba(56, 189, 248, 0.4); }
         .star-trigger.available span.num { color: #38bdf8; }
-        .star-trigger.available:hover { transform: scale(1.2); box-shadow: 0 0 30px #38bdf8; }
+        .star-trigger.available:hover { transform: scale(1.15); box-shadow: 0 0 30px #38bdf8; }
         
-        .star-trigger.locked { opacity: 0.4; cursor: not-allowed; border-color: rgba(255, 255, 255, 0.1); }
+        .star-trigger.locked { opacity: 0.3; cursor: not-allowed; border-color: rgba(255, 255, 255, 0.1); }
         .star-trigger.locked span.icon { display: none; }
         .star-trigger.locked::after { content: '🔒'; font-size: 0.7rem; position: absolute; bottom: 5px; }
 
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            20%, 60% { transform: translateX(-6px); }
-            40%, 80% { transform: translateX(6px); }
-        }
         .shake { animation: shake 0.4s ease-in-out; }
         
-        /* Modales pour les souvenirs */
+        /* Modales pour les souvenirs adaptées au Mobile */
         .story-card {
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.8);
-            width: 85%; max-width: 400px; background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+            width: 88%; max-width: 400px; background: rgba(10, 10, 18, 0.6);
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 24px;
-            padding: 30px; z-index: 5; opacity: 0; pointer-events: none;
+            padding: 35px 25px; z-index: 5; opacity: 0; pointer-events: none;
             transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); text-align: center;
             font-family: 'Poppins', sans-serif;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.5);
         }
         .story-card.active { opacity: 1; pointer-events: auto; transform: translate(-50%, -50%) scale(1); }
-        .story-card h3 { font-family: 'Cinzel', serif; font-size: 1.5rem; margin-bottom: 15px; color: #ebdca5; }
+        .story-card h3 { font-family: 'Cinzel', serif; font-size: 1.4rem; margin-bottom: 15px; color: #ebdca5; }
         .story-card p { font-size: 0.95rem; line-height: 1.6; color: #cbd5e1; font-weight: 300; }
-        .close-btn { margin-top: 20px; background: #ffffff; color: #000000; border: none; padding: 10px 25px; border-radius: 25px; cursor: pointer; font-weight: 600; font-size: 0.85rem; letter-spacing: 1px; text-transform: uppercase; }
 
-        /* Écran 4 : Le Grand Final Émotionnel */
+        .close-btn { margin-top: 25px; background: #ffffff; color: #000000; border: none; padding: 12px 30px; border-radius: 25px; cursor: pointer; font-weight: 600; font-size: 0.8rem; letter-spacing: 1px; text-transform: uppercase; box-shadow: 0 5px 15px rgba(255,255,255,0.1); }
+
+        /* Écran 4 : Le Grand Final Émotionnel Responsive */
         #final-screen {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             z-index: 8; background: radial-gradient(circle at 50% 100%, #0c1524 0%, #020208 100%);
             display: flex; flex-direction: column; justify-content: center; align-items: center;
-            opacity: 0; pointer-events: none; transition: opacity 2.5s ease; padding: 25px; text-align: center;
+            opacity: 0; pointer-events: none; transition: opacity 2.5s ease; padding: 20px; text-align: center;
+            overflow-y: auto;
         }
         #final-screen.active { opacity: 1; pointer-events: auto; }
         
         .letter-box {
-            width: 100%; max-width: 500px; padding: 45px 35px;
+            width: 100%; max-width: 500px; padding: 40px 25px;
             background: rgba(255, 255, 255, 0.01); border: 1px solid rgba(255, 255, 255, 0.04);
-            border-radius: 24px; backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.8);
+            border-radius: 24px; backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.7);
+            margin: auto;
         }
-        .letter-box h1 { font-family: 'Cinzel', serif; font-size: 1.5rem; color: #ebdca5; margin-bottom: 25px; letter-spacing: 2px; line-height: 1.4; }
-        .letter-box p { font-size: 0.95rem; line-height: 2; font-weight: 300; text-align: justify; color: #e2e8f0; }
+        .letter-box h1 { font-family: 'Cinzel', serif; font-size: clamp(1.3rem, 4vw, 1.8rem); color: #ebdca5; margin-bottom: 25px; letter-spacing: 1px; line-height: 1.4; }
+        .letter-box p { font-size: clamp(0.9rem, 3vw, 1rem); line-height: 1.9; font-weight: 300; text-align: justify; color: #e2e8f0; }
         .signature { margin-top: 30px; text-align: right; font-family: 'Cinzel', serif; font-size: 0.85rem; color: #cbd5e1; letter-spacing: 2px; }
 
+        /* Animations */
+        @keyframes fingerPulse { 0%, 100% { transform: scale(1); filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.5)); } 50% { transform: scale(1.08); filter: drop-shadow(0 0 18px rgba(56, 189, 248, 0.9)); } }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 20%, 60% { transform: translateX(-6px); } 40%, 80% { transform: translateX(6px); } }
+
         .glow-orb { position: absolute; width: 300px; height: 300px; background: radial-gradient(circle, rgba(56,189,248,0.06) 0%, rgba(0,0,0,0) 70%); top: 50%; left: 50%; transform: translate(-50%, -50%); pointer-events: none; z-index: 2; }
-        #toast-alert { position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); background: rgba(239, 68, 68, 0.2); border: 1px solid rgba(239, 68, 68, 0.4); padding: 12px 24px; border-radius: 30px; font-size: 0.8rem; letter-spacing: 1px; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); z-index: 20; opacity: 0; transition: opacity 0.4s; pointer-events: none; text-align: center; width: 80%; max-width: 300px; }
+        #toast-alert { position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%); background: rgba(239, 68, 68, 0.25); border: 1px solid rgba(239, 68, 68, 0.4); padding: 12px 24px; border-radius: 30px; font-size: 0.8rem; letter-spacing: 1px; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); z-index: 20; opacity: 0; transition: opacity 0.4s; pointer-events: none; text-align: center; width: 85%; max-width: 320px; }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </head>
@@ -155,13 +158,13 @@
 
         <div class="hold-container">
             <svg class="progress-svg">
-                <circle class="progress-circle" cx="60" cy="60" r="50" stroke-width="3"/>
+                <circle class="progress-circle" cx="70" cy="70" r="60"/>
             </svg>
             <div class="hold-button" id="main-action">
-                <span class="hold-icon" id="action-icon">✨</span>
+                <span class="hold-icon" id="action-icon">🫵</span>
             </div>
         </div>
-        <div class="hint-text" id="hint">Maintiens ton doigt appuyé pour briser la distance</div>
+        <div class="hint-text" id="hint">Pose ton empreinte digitale pour briser la distance</div>
     </div>
 
     <div id="riddle-stage">
@@ -178,13 +181,13 @@
     <div id="canvas-container"></div>
 
     <div id="ui-layer">
-        <div id="trigger-1" class="star-trigger available" style="top: 32%; left: 22%;" onclick="openMemory(1)">
+        <div id="trigger-1" class="star-trigger available" style="top: 28%; left: 20%;" onclick="openMemory(1)">
             <span class="num">01</span><span class="icon">✨</span>
         </div>
-        <div id="trigger-2" class="star-trigger locked" style="top: 48%; left: 72%;" onclick="openMemory(2)">
+        <div id="trigger-2" class="star-trigger locked" style="top: 46%; left: 70%;" onclick="openMemory(2)">
             <span class="num">02</span><span class="icon">✨</span>
         </div>
-        <div id="trigger-3" class="star-trigger locked" style="top: 68%; left: 38%;" onclick="openMemory(3)">
+        <div id="trigger-3" class="star-trigger locked" style="top: 66%; left: 35%;" onclick="openMemory(3)">
             <span class="num">03</span><span class="icon">✨</span>
         </div>
     </div>
@@ -257,15 +260,14 @@
         }
         setTimeout(animateDistance, 500);
 
-        // --- LOGIQUE SENSORIELLE : LE BOUTON NON S'ENFUIT ET OUI GRANDIT ---
+        // --- LOGIQUE BIOMÉTRIQUE POÉTIQUE : LE BOUTON "NON" S'ENFUIT ET "OUI" GRANDIT ---
         function fleeNo() {
             const btnNo = document.getElementById('btn-no');
             const btnYes = document.getElementById('btn-yes');
             
-            // Calcul de coordonnées aléatoires sécurisées dans la boîte parent
             const container = document.querySelector('.btn-container');
-            const maxX = (container.clientWidth / 2) - 40;
-            const maxY = (container.clientHeight / 2) - 20;
+            const maxX = (container.clientWidth / 2) - 50;
+            const maxY = (container.clientHeight / 2) - 25;
             
             const randomX = (Math.random() * 2 - 1) * maxX;
             const randomY = (Math.random() * 2 - 1) * maxY;
@@ -273,16 +275,14 @@
             btnNo.style.position = 'absolute';
             btnNo.style.transform = `translate(${randomX}px, ${randomY}px)`;
             
-            // Le bouton OUI grandit de plus en plus
             yesScale += 0.25;
             btnYes.style.transform = `scale(${yesScale})`;
             
-            if (navigator.vibrate) navigator.vibrate(50);
+            if (navigator.vibrate) navigator.vibrate(40);
         }
 
         function nextRiddle() {
             currentRiddleIndex++;
-            // Réinitialisation des styles de boutons pour la prochaine énigme
             yesScale = 1.0;
             const btnYes = document.getElementById('btn-yes');
             const btnNo = document.getElementById('btn-no');
@@ -294,7 +294,6 @@
                 document.getElementById('riddle-title').innerText = riddles[currentRiddleIndex].title;
                 document.getElementById('riddle-text').innerText = riddles[currentRiddleIndex].text;
             } else {
-                // Fin des énigmes -> Passage à l'univers 3D
                 document.getElementById('riddle-stage').style.opacity = '0';
                 setTimeout(() => {
                     document.getElementById('riddle-stage').style.display = 'none';
@@ -304,7 +303,7 @@
             }
         }
 
-        // --- MOTEUR 3D THREE.JS (GALAXIE EN ARRIÈRE-PLAN) ---
+        // --- MOTEUR 3D THREE.JS (GALAXIE RESPONSIVE) ---
         let scene, camera, renderer, starGeo, stars;
         let currentStep = 1; 
         let starSpeedY = 0.0008;
@@ -318,6 +317,7 @@
 
             renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
             renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // Limite le ratio pour les écrans Retina lents
             document.getElementById('canvas-container').appendChild(renderer.domElement);
 
             starGeo = new THREE.BufferGeometry();
@@ -331,7 +331,7 @@
 
             let sprite = new THREE.TextureLoader().load('https://threejs.org/examples/textures/sprites/snowflake1.png');
             let starMaterial = new THREE.PointsMaterial({
-                color: 0x38bdf8, size: 0.6, map: sprite, transparent: true, opacity: 0.8
+                color: 0x38bdf8, size: window.innerWidth < 600 ? 0.9 : 0.6, map: sprite, transparent: true, opacity: 0.8
             });
 
             stars = new THREE.Points(starGeo, starMaterial);
@@ -346,7 +346,7 @@
             requestAnimationFrame(animate);
         }
 
-        // --- LOGIQUE DU BOUTON PRESSION PROLONGÉE (ÉCRAN 1) ---
+        // --- LOGIQUE DU COMPTEUR EMBREINTE DIGITALE (ÉCRAN 1) ---
         const actionBtn = document.getElementById('main-action');
         const progressCircle = document.querySelector('.progress-circle');
         const actionIcon = document.getElementById('action-icon');
@@ -361,8 +361,9 @@
             e.preventDefault();
             if(holdActive) return;
             holdActive = true;
-            actionIcon.style.transform = "scale(1.3)";
-            hintText.innerText = "Connexion avec Filsan... Reste appuyée";
+            actionIcon.innerText = "🌀"; // Animation visuelle d'empreinte active
+            actionIcon.style.transform = "scale(1.2)";
+            hintText.innerText = "Analyse d'empreinte en cours... Reste appuyée";
             hintText.style.color = "#38bdf8";
 
             let startTime = Date.now() - (currentProgress * (duration / 100));
@@ -371,7 +372,8 @@
                 let elapsed = Date.now() - startTime;
                 currentProgress = Math.min((elapsed / duration) * 100, 100);
                 
-                let offset = 314 - (314 * currentProgress) / 100;
+                // Circonférence calculée : 2 * Math.PI * 60 = 376.99
+                let offset = 377 - (377 * currentProgress) / 100;
                 progressCircle.style.strokeDashoffset = offset;
 
                 let dynamicDist = Math.max(Math.floor(TARGET_DIST * (1 - (currentProgress / 100))), 0);
@@ -382,15 +384,16 @@
                     triggerIntroSuccess();
                 }
             }, 30);
-            if (navigator.vibrate) navigator.vibrate([80, 40, 80]);
+            if (navigator.vibrate) navigator.vibrate([60, 30, 60]);
         }
 
         function endHold() {
             if(!holdActive) return;
             holdActive = false;
             clearInterval(progressInterval);
+            actionIcon.innerText = "🫵"; 
             actionIcon.style.transform = "scale(1)";
-            hintText.innerText = "Signal rompu... Reste appuyée !";
+            hintText.innerText = "Empreinte relâchée... Recommence !";
             hintText.style.color = "#ef4444";
 
             let decayTime = Date.now();
@@ -399,7 +402,7 @@
             let decayInterval = setInterval(() => {
                 let elapsed = Date.now() - decayTime;
                 currentProgress = Math.max(startProgress - (elapsed / 1000) * 60, 0); 
-                let offset = 314 - (314 * currentProgress) / 100;
+                let offset = 377 - (377 * currentProgress) / 100;
                 progressCircle.style.strokeDashoffset = offset;
 
                 let dynamicDist = Math.floor(TARGET_DIST * (1 - (currentProgress / 100)));
@@ -407,7 +410,7 @@
 
                 if (currentProgress <= 0) {
                     clearInterval(decayInterval);
-                    hintText.innerText = "Maintiens ton doigt appuyé pour briser la distance";
+                    hintText.innerText = "Pose ton empreinte digitale pour briser la distance";
                     hintText.style.color = "#64748b";
                 }
             }, 30);
@@ -420,12 +423,11 @@
             
             setTimeout(() => {
                 document.getElementById('intro-stage').style.display = 'none';
-                // On active le Riddle Stage (Énigmes) au lieu de la 3D directement
                 document.getElementById('riddle-stage').style.display = 'flex';
             }, 1500);
         }
 
-        // --- GESTIONNAIRE TOAST ET SECURISATION DES RECHERCHES D'ÉTOILES ---
+        // --- GESTIONNAIRE RECHERCHES D'ÉTOILES SÉCURISÉES ---
         function showToast(text) {
             const toast = document.getElementById('toast-alert');
             toast.innerText = text;
